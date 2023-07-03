@@ -9,6 +9,8 @@ import { User } from '../user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { OperationCanceledException } from 'typescript';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +42,7 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async register(registerDto: RegisterDto): Promise<User> {
+  async register(registerDto: RegisterDto): Promise<string> {
     const { email, password } = registerDto;
 
     const userExists = await this.userService.findByEmail(email);
@@ -48,15 +50,21 @@ export class AuthService {
       throw new ConflictException('User with this email already exists');
     }
 
+    const user = plainToInstance(User, registerDto);
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new User();
-    user.name = registerDto.name;
-    user.firstName = registerDto.firstName;
-    user.lastName = registerDto.lastName;
-    user.email = registerDto.email;
     user.password = hashedPassword;
 
-    return await this.userService.create(user);
+    const newUser = await this.userService.create(user);
+
+    if (!newUser) {
+      throw new OperationCanceledException();
+    }
+
+    const payload = {
+      id: newUser.id,
+      email: newUser.email,
+      roles: newUser.roles,
+    };
+    return this.jwtService.sign(payload);
   }
 }
