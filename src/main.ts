@@ -5,7 +5,7 @@ import { ValidationPipe } from './pipes/validation.pipes';
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const port = app.get(ConfigService).get('APP_PORT') || 5001;
   const database = app.get(ConfigService).get('TYPEORM_DATABASE') || 5001;
 

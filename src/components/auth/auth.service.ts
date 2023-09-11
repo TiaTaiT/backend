@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -39,7 +41,7 @@ export class AuthService {
 
     const payload = { id: user.id, email: user.email, roles: user.roles };
     console.log(payload);
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign({ user });
   }
 
   async register(registerDto: RegisterDto): Promise<string> {
@@ -66,5 +68,14 @@ export class AuthService {
       roles: newUser.roles,
     };
     return this.jwtService.sign(payload);
+  }
+
+  async verifyJwt(jwt: string): Promise<{ exp: number }> {
+    try {
+      const { exp } = await this.jwtService.verifyAsync(jwt);
+      return { exp };
+    } catch (error) {
+      throw new HttpException('Invalid JWT', HttpStatus.UNAUTHORIZED);
+    }
   }
 }

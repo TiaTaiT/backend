@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,14 +22,8 @@ export class UserService {
     return await this.usersRepository.findOne({ where: { id } });
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(user: User): Promise<User> {
     const role = await this.rolesService.getRoleByName(AvailableRoles.USER);
-    const user = new User();
-    user.email = createUserDto.email;
-    user.password = createUserDto.password;
-    user.firstName = createUserDto.firstName;
-    user.lastName = createUserDto.lastName;
-    user.name = createUserDto.name;
     user.roles = [role];
     return await this.usersRepository.save(user);
   }

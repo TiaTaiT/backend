@@ -38,6 +38,9 @@ export class User {
   @UpdateDateColumn()
   updated_at?: Date;
 
+  @Column({ nullable: true })
+  avatar: string; // filename for the avatar image
+
   @ManyToMany(() => Role, (role) => role.users, { cascade: true })
   @JoinTable()
   roles: Role[];

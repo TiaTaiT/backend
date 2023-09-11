@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,6 +28,11 @@ export class UserController {
   @Get(':id')
   findUser(@Param('id') id: string) {
     return this.userService.findUser(+id);
+  }
+
+  @Get('avatar/:fileId')
+  getAvatar(@Param('fileId') fileId, @Res() res) {
+    res.sendFile(fileId, { root: 'static/avatars' });
   }
 
   @Patch(':id')
