@@ -1,49 +1,50 @@
-import { Role } from 'src/components/role/entities/role.entity';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Role } from '../../role/entities/role.entity';
 import * as bcrypt from 'bcrypt';
+import {
+  Collection,
+  Entity,
+  EntityRepositoryType,
+  ManyToMany,
+  PrimaryKey,
+  Property,
+  Unique,
+} from '@mikro-orm/core';
+import { UserRepository } from '../user.repository';
 
-@Entity()
+@Entity({ customRepository: () => UserRepository })
 export class User {
-  @PrimaryGeneratedColumn('identity', {
-    generatedIdentity: 'ALWAYS',
-  })
-  id: number;
+  [EntityRepositoryType]?: UserRepository;
 
-  @Column()
+  @PrimaryKey()
+  id!: number;
+
+  @Property()
   name: string;
 
-  @Column({ unique: true })
-  email: string;
+  @Property()
+  @Unique()
+  email!: string;
 
-  @Column()
-  password: string;
+  @Property()
+  password!: string;
 
-  @Column()
+  @Property()
   firstName: string;
 
-  @Column()
+  @Property()
   lastName: string;
 
-  @CreateDateColumn()
-  created_at?: Date;
+  @Property()
+  createdAt?: Date = new Date();
 
-  @UpdateDateColumn()
-  updated_at?: Date;
+  @Property({ onUpdate: () => new Date() })
+  updatedAt?: Date = new Date();
 
-  @Column({ nullable: true })
-  avatar: string; // filename for the avatar image
+  @Property()
+  avatar?: string; // filename for the avatar image
 
-  @ManyToMany(() => Role, (role) => role.users, { cascade: true })
-  @JoinTable()
-  roles: Role[];
+  @ManyToMany(() => Role)
+  roles: Collection<Role> = new Collection<Role>(this);
 
   async comparePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);

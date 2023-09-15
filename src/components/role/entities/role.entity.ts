@@ -1,19 +1,34 @@
-import { User } from 'src/components/user/entities/user.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Collection,
+  Entity,
+  EntityRepositoryType,
+  ManyToMany,
+  PrimaryKey,
+  Property,
+  Unique,
+} from '@mikro-orm/core';
+import { User } from '../../user/entities/user.entity';
+import { RoleRepository } from '../role.repository';
 
-@Entity()
+@Entity({ customRepository: () => RoleRepository })
 export class Role {
-  @PrimaryGeneratedColumn('identity', {
-    generatedIdentity: 'ALWAYS',
-  })
+  [EntityRepositoryType]?: RoleRepository;
+
+  @PrimaryKey()
   id: number;
 
-  @Column({ unique: true })
-  name: string;
+  @Property()
+  @Unique()
+  name!: string;
 
-  @Column()
-  description: string;
+  @Property()
+  description!: string;
 
   @ManyToMany(() => User, (user) => user.roles)
-  users: User[];
+  users: Collection<User> = new Collection<User>(this);
+
+  constructor(name: string, description: string) {
+    this.name = name;
+    this.description = description;
+  }
 }

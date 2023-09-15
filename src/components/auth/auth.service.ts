@@ -55,6 +55,7 @@ export class AuthService {
     const user = plainToInstance(User, registerDto);
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
+    user.avatar = '';
 
     const newUser = await this.userService.create(user);
 
@@ -70,10 +71,13 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async verifyJwt(jwt: string): Promise<{ exp: number }> {
+  async verifyJwt(jwt: string): Promise<[user: number, exp: number]> {
     try {
-      const { exp } = await this.jwtService.verifyAsync(jwt);
-      return { exp };
+      console.log('Look at this 1: ', jwt);
+      const { user, exp } = await this.jwtService.verifyAsync(jwt);
+      const id = user.id;
+      console.log('Look at this 2: ', { id, exp });
+      return [id, exp];
     } catch (error) {
       throw new HttpException('Invalid JWT', HttpStatus.UNAUTHORIZED);
     }

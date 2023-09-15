@@ -1,30 +1,51 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { Role } from './entities/role.entity';
-import { In, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { RoleRepository } from './role.repository';
+import { EntityManager } from '@mikro-orm/core';
 
 @Injectable()
 export class RoleService {
   constructor(
-    @InjectRepository(Role) private rolesRepository: Repository<Role>,
+    private readonly roleRepository: RoleRepository,
+    private readonly em: EntityManager,
   ) {}
 
-  async create(createRoleDto: CreateRoleDto) {
-    return await this.rolesRepository.save(createRoleDto).then((res) => res);
+  async create(createRoleDto: CreateRoleDto): Promise<Role> {
+    const { name, description } = createRoleDto;
+    const exists = await this.roleRepository.count({ $or: [{ name }] });
+
+    if (exists > 0) {
+      throw new HttpException({
+          message: 'Input data validation failed',
+          errors: { username: 'Username and email must be unique.' },
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // create new role
+    const role = new Role(name, description);
+    await this.em.persistAndFlush(role);
+    return role;
   }
 
   async findAll() {
-    return await this.rolesRepository.find();
+    return await this.roleRepository.findAll();
   }
 
   async findRole(id: number) {
-    return await this.rolesRepository.findOne({ where: { id } });
+    return await this.roleRepository.findOne(id);
   }
 
   async findRoles(ids: number[]): Promise<Role[]> {
-    const roles = await this.rolesRepository.findBy({ id: In(ids) });
+    const roles = await this.roleRepository.findRoles(ids);
 
     if (roles.length !== ids.length) {
       const missingRoles = ids.filter(
@@ -39,11 +60,11 @@ export class RoleService {
   }
 
   async getRoleByName(name: string) {
-    return await this.rolesRepository.findOne({ where: { name } });
+    return await this.roleRepository.findOne({ name });
   }
 
   async remove(id: number) {
-    return await this.rolesRepository.delete(id);
+    return await this.roleRepository.nativeDelete(id);
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto): Promise<Role> {
@@ -58,7 +79,7 @@ export class RoleService {
     Object.assign(role, updateRoleDto);
 
     // Save the updated user
-    await this.rolesRepository.save(role);
+    await this.em.flush();
     return this.findRole(id);
   }
 }
