@@ -19,7 +19,7 @@ const options: Options = {
   entities: [process.env.TYPEORM_ENTITIES],
   entitiesTs: [process.env.TYPEORM_ENTITIESTS],
   namingStrategy: UnderscoreNamingStrategy,
-  logger: console.log, // Enable query logging to console 
+  logger: console.log, // Enable query logging to console
   migrations: {
     tableName: 'mikro_orm_migrations', // name of database table with log of executed transactions
     path: './src/database/migrations', // path to the folder with migrations

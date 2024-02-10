@@ -11,7 +11,7 @@ import { DevicesService } from './devices.service';
 import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
 
-@Controller('device')
+@Controller('api/device')
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) {}
 
@@ -23,6 +23,11 @@ export class DevicesController {
   @Get()
   findAll() {
     return this.devicesService.findAll();
+  }
+
+  @Get('simple')
+  findAllSimple() {
+    return this.devicesService.findAllSimple();
   }
 
   @Get(':id')

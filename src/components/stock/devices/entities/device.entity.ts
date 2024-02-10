@@ -2,16 +2,19 @@ import { Status } from '../../status/entities/status.entity';
 import { User } from '../../../user/entities/user.entity';
 import { DeviceRepository } from '../device.repository';
 import {
+  Collection,
   Entity,
   EntityRepositoryType,
+  ManyToMany,
   ManyToOne,
   PrimaryKey,
   Property,
-  Unique,
 } from '@mikro-orm/core';
 import { Brand } from '../../brand/entities/brand.entity';
 import { Model } from '../../models/entities/model.entity';
 import { Pim } from '../../pim/entities/pim.entity';
+import { Protocol } from '../../protocol/entities/protocol.entity';
+import { Type } from '../../type/entities/type.entity';
 
 @Entity({ customRepository: () => DeviceRepository })
 export class Device {
@@ -38,9 +41,8 @@ export class Device {
   @Property()
   virtual!: boolean;
 
-  @Property()
-  @Unique()
-  erpCode: string = '';
+  @Property({ unique: true, nullable: true })
+  erpCode?: string;
 
   @Property({ type: 'float' })
   length: number = 0.0; // float [note: 'Device length in meters']
@@ -61,13 +63,13 @@ export class Device {
   updatedAt: Date = new Date();
 
   @ManyToOne()
-  updator!: User;
+  updater!: User;
 
   @ManyToOne()
   status!: Status;
 
   @ManyToOne({ nullable: true })
-  type?: Status;
+  type?: Type;
 
   @ManyToOne({ nullable: true })
   brand?: Brand;
@@ -77,4 +79,7 @@ export class Device {
 
   @ManyToOne({ nullable: true })
   pim?: Pim;
+
+  @ManyToMany(() => Protocol)
+  protocols: Collection<Protocol> = new Collection<Protocol>(this);
 }

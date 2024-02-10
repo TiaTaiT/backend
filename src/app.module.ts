@@ -12,6 +12,9 @@ import { BrandModule } from './components/stock/brand/brand.module';
 import { ModelsModule } from './components/stock/models/models.module';
 import { PimModule } from './components/stock/pim/pim.module';
 import { DocumentModule } from './components/stock/document/document.module';
+import { ProtocolModule } from './components/stock/protocol/protocol.module';
+import { HardwareModule } from './components/app-auth/hardware/hardware.module';
+import { FunctionalityModule } from './components/app-auth/functionality/functionality.module';
 
 const envModule = ConfigModule.forRoot({
   isGlobal: true,
@@ -31,7 +34,10 @@ const envModule = ConfigModule.forRoot({
     ModelsModule,
     PimModule,
     DocumentModule,
+    ProtocolModule,
     FileStorageModule,
+    HardwareModule,
+    FunctionalityModule,
   ],
 })
 export class AppModule {}

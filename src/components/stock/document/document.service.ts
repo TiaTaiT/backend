@@ -24,7 +24,7 @@ export class DocumentService {
   ) {}
 
   async create(createDocumentDto: CreateDocumentDto): Promise<Document> {
-    const { name, description } = createDocumentDto;
+    const { name } = createDocumentDto;
     const exists = await this.documentRepository.count({
       $or: [{ name }],
     });
@@ -32,16 +32,16 @@ export class DocumentService {
     if (exists > 0) {
       throw new HttpException(
         {
-          message: 'Input data validation failed',
+          message: 'A document with this name already exists.',
         },
         HttpStatus.BAD_REQUEST,
       );
     }
 
     // create new type
-    const document = new Document(name, description ? description : '');
+    const document = new Document(name);
     document.creator = await this.userRepository.findOne(1);
-    document.updator = document.creator;
+    document.updater = document.creator;
     await this.em.persistAndFlush(document);
     return document;
   }
@@ -52,6 +52,11 @@ export class DocumentService {
 
   async findOne(id: number): Promise<Document> {
     return await this.documentRepository.findOne(id);
+  }
+
+  async findOneByName(documentName: string): Promise<Document> {
+    console.log('document name: ', documentName);
+    return await this.documentRepository.findOne({ name: documentName });
   }
 
   async update(
@@ -65,7 +70,7 @@ export class DocumentService {
     }
 
     wrap(document).assign(updateDocumentDto);
-    document.updator = await this.userRepository.findOne(1);
+    document.updater = await this.userRepository.findOne(1);
     await this.em.flush();
     return await this.findOne(id);
   }

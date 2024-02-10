@@ -42,7 +42,7 @@ export class PimService {
     const pim = new Pim();
     wrap(pim).assign(createPimDto);
     pim.creator = await this.userRepository.findOne(1);
-    pim.updator = pim.creator;
+    pim.updater = pim.creator;
     await this.em.persistAndFlush(pim);
     return pim;
   }
@@ -63,7 +63,7 @@ export class PimService {
     }
 
     wrap(pim).assign(updatePimDto);
-    pim.updator = await this.userRepository.findOne(1);
+    pim.updater = await this.userRepository.findOne(1);
     await this.em.flush();
     return await this.findOne(id);
   }

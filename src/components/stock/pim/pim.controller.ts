@@ -11,7 +11,7 @@ import { PimService } from './pim.service';
 import { CreatePimDto } from './dto/create-pim.dto';
 import { UpdatePimDto } from './dto/update-pim.dto';
 
-@Controller('device/pim')
+@Controller('api/devices/pim')
 export class PimController {
   constructor(private readonly pimService: PimService) {}
 

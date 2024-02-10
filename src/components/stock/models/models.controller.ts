@@ -11,7 +11,7 @@ import { ModelsService } from './models.service';
 import { CreateModelDto } from './dto/create-model.dto';
 import { UpdateModelDto } from './dto/update-model.dto';
 
-@Controller('device/model')
+@Controller('api/devices/model')
 export class ModelsController {
   constructor(private readonly modelsService: ModelsService) {}
 

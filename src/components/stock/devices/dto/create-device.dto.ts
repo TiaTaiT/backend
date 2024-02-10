@@ -1,5 +1,17 @@
 import { PlainObject } from '@mikro-orm/core';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Pim } from '../../pim/entities/pim.entity';
+import { Model } from '../../models/entities/model.entity';
+import { Brand } from '../../brand/entities/brand.entity';
+import { Type } from '../../type/entities/type.entity';
+import { Status } from '../../status/entities/status.entity';
+import { Document } from '../../document/entities/document.entity';
 
 export class CreateDeviceDto extends PlainObject {
   @IsString()
@@ -7,14 +19,14 @@ export class CreateDeviceDto extends PlainObject {
 
   @IsString()
   @IsOptional()
-  alterName: string = '';
+  alterName?: string = '';
 
   @IsString()
   description: string = '';
 
   @IsString()
   @IsOptional()
-  vendorCode: string = '';
+  vendorCode?: string = '';
 
   @IsBoolean()
   canHasChildren!: boolean;
@@ -22,9 +34,13 @@ export class CreateDeviceDto extends PlainObject {
   @IsBoolean()
   virtual!: boolean;
 
+  @IsArray()
+  @IsOptional()
+  protocols?: number[];
+
   @IsString()
   @IsOptional()
-  erpCode: string = '';
+  erpCode?: string = '';
 
   @IsNumber()
   @IsOptional()
@@ -40,21 +56,25 @@ export class CreateDeviceDto extends PlainObject {
 
   @IsNumber()
   @IsOptional()
-  status: number;
+  status: Status;
 
   @IsNumber()
   @IsOptional()
-  type?: number;
+  type?: Type;
 
   @IsNumber()
   @IsOptional()
-  brand?: number;
+  brand?: Brand;
 
   @IsNumber()
   @IsOptional()
-  model?: number;
+  model?: Model;
 
   @IsNumber()
   @IsOptional()
-  pim?: number;
+  pim?: Pim;
+
+  @IsString()
+  @IsOptional()
+  document?: Document;
 }

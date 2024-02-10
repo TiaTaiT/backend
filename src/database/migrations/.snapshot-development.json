@@ -80,6 +80,227 @@
           "mappedType": "string"
         }
       },
+      "name": "functionality",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "keyName": "functionality_name_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "functionality_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "serial": {
+          "name": "serial",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "hardware",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "serial"
+          ],
+          "composite": false,
+          "keyName": "hardware_serial_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "hardware_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "hardware_id": {
+          "name": "hardware_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "functionality_id": {
+          "name": "functionality_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "hardware_functionalities",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "hardware_functionalities_pkey",
+          "columnNames": [
+            "hardware_id",
+            "functionality_id"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "hardware_functionalities_hardware_id_foreign": {
+          "constraintName": "hardware_functionalities_hardware_id_foreign",
+          "columnNames": [
+            "hardware_id"
+          ],
+          "localTableName": "public.hardware_functionalities",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.hardware",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "hardware_functionalities_functionality_id_foreign": {
+          "constraintName": "hardware_functionalities_functionality_id_foreign",
+          "columnNames": [
+            "functionality_id"
+          ],
+          "localTableName": "public.hardware_functionalities",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.functionality",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "protocol",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "keyName": "protocol_name_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "protocol_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
       "name": "role",
       "schema": "public",
       "indexes": [
@@ -366,8 +587,8 @@
           "length": 6,
           "mappedType": "datetime"
         },
-        "updator_id": {
-          "name": "updator_id",
+        "updater_id": {
+          "name": "updater_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -403,10 +624,10 @@
           "referencedTableName": "public.user",
           "updateRule": "cascade"
         },
-        "pim_updator_id_foreign": {
-          "constraintName": "pim_updator_id_foreign",
+        "pim_updater_id_foreign": {
+          "constraintName": "pim_updater_id_foreign",
           "columnNames": [
-            "updator_id"
+            "updater_id"
           ],
           "localTableName": "public.pim",
           "referencedColumnNames": [
@@ -493,8 +714,8 @@
           "length": 6,
           "mappedType": "datetime"
         },
-        "updator_id": {
-          "name": "updator_id",
+        "updater_id": {
+          "name": "updater_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -530,10 +751,10 @@
           "referencedTableName": "public.user",
           "updateRule": "cascade"
         },
-        "model_updator_id_foreign": {
-          "constraintName": "model_updator_id_foreign",
+        "model_updater_id_foreign": {
+          "constraintName": "model_updater_id_foreign",
           "columnNames": [
-            "updator_id"
+            "updater_id"
           ],
           "localTableName": "public.model",
           "referencedColumnNames": [
@@ -557,15 +778,6 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "description": {
-          "name": "description",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -602,8 +814,8 @@
           "length": 6,
           "mappedType": "datetime"
         },
-        "updator_id": {
-          "name": "updator_id",
+        "updater_id": {
+          "name": "updater_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -615,6 +827,15 @@
       "name": "document",
       "schema": "public",
       "indexes": [
+        {
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "keyName": "document_name_unique",
+          "primary": false,
+          "unique": true
+        },
         {
           "keyName": "document_pkey",
           "columnNames": [
@@ -639,10 +860,10 @@
           "referencedTableName": "public.user",
           "updateRule": "cascade"
         },
-        "document_updator_id_foreign": {
-          "constraintName": "document_updator_id_foreign",
+        "document_updater_id_foreign": {
+          "constraintName": "document_updater_id_foreign",
           "columnNames": [
-            "updator_id"
+            "updater_id"
           ],
           "localTableName": "public.document",
           "referencedColumnNames": [
@@ -727,8 +948,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
-          "default": "''",
+          "nullable": true,
           "mappedType": "string"
         },
         "length": {
@@ -790,8 +1010,8 @@
           "length": 6,
           "mappedType": "datetime"
         },
-        "updator_id": {
-          "name": "updator_id",
+        "updater_id": {
+          "name": "updater_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -881,10 +1101,10 @@
           "referencedTableName": "public.user",
           "updateRule": "cascade"
         },
-        "device_updator_id_foreign": {
-          "constraintName": "device_updator_id_foreign",
+        "device_updater_id_foreign": {
+          "constraintName": "device_updater_id_foreign",
           "columnNames": [
-            "updator_id"
+            "updater_id"
           ],
           "localTableName": "public.device",
           "referencedColumnNames": [
@@ -914,7 +1134,7 @@
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.status",
+          "referencedTableName": "public.type",
           "deleteRule": "set null",
           "updateRule": "cascade"
         },
@@ -955,6 +1175,71 @@
           ],
           "referencedTableName": "public.pim",
           "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "device_id": {
+          "name": "device_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "protocol_id": {
+          "name": "protocol_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "device_protocols",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "device_protocols_pkey",
+          "columnNames": [
+            "device_id",
+            "protocol_id"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "device_protocols_device_id_foreign": {
+          "constraintName": "device_protocols_device_id_foreign",
+          "columnNames": [
+            "device_id"
+          ],
+          "localTableName": "public.device_protocols",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.device",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "device_protocols_protocol_id_foreign": {
+          "constraintName": "device_protocols_protocol_id_foreign",
+          "columnNames": [
+            "protocol_id"
+          ],
+          "localTableName": "public.device_protocols",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.protocol",
+          "deleteRule": "cascade",
           "updateRule": "cascade"
         }
       }

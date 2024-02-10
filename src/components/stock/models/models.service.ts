@@ -42,7 +42,7 @@ export class ModelsService {
     const model = new Model();
     wrap(model).assign(createModelDto);
     model.creator = await this.userRepository.findOne(1);
-    model.updator = model.creator;
+    model.updater = model.creator;
     await this.em.persistAndFlush(model);
     return model;
   }
@@ -63,7 +63,7 @@ export class ModelsService {
     }
 
     wrap(model).assign(updateModelDto);
-    model.updator = await this.userRepository.findOne(1);
+    model.updater = await this.userRepository.findOne(1);
     await this.em.flush();
     return await this.findOne(id);
   }

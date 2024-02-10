@@ -28,5 +28,5 @@ export class Model {
   updatedAt?: Date = new Date();
 
   @ManyToOne()
-  updator?: User;
+  updater?: User;
 }

@@ -1,4 +1,10 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+  Entity,
+  ManyToOne,
+  PrimaryKey,
+  Property,
+  Unique,
+} from '@mikro-orm/core';
 import { User } from '../../../user/entities/user.entity';
 
 @Entity()
@@ -7,10 +13,8 @@ export class Document {
   id: number;
 
   @Property()
+  @Unique()
   name!: string;
-
-  @Property()
-  description?: string;
 
   @Property()
   createdAt: Date = new Date();
@@ -22,10 +26,9 @@ export class Document {
   updatedAt?: Date = new Date();
 
   @ManyToOne()
-  updator?: User;
+  updater?: User;
 
-  constructor(name: string, description: string) {
+  constructor(name: string) {
     this.name = name;
-    this.description = description;
   }
 }

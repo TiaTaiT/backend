@@ -22,5 +22,5 @@ export class Pim {
   updatedAt?: Date = new Date();
 
   @ManyToOne()
-  updator?: User;
+  updater?: User;
 }

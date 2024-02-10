@@ -16,8 +16,11 @@ import { MulterModule } from '@nestjs/platform-express';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        //secret: configService.get<string>('JWT_SECRET'),
+        privateKey: configService.get('JWT_PRIVATE_KEY'),
+        publicKey: configService.get('JWT_PUBLIC_KEY'),
         signOptions: { expiresIn: '1d' }, // Adjust the expiration
+        algorithm: 'RS256',
       }),
     }),
     MulterModule.registerAsync({

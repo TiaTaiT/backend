@@ -11,7 +11,7 @@ import { TypeService } from './type.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 
-@Controller('device/type')
+@Controller('api/devices/type')
 export class TypeController {
   constructor(private readonly typeService: TypeService) {}
 

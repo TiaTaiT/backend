@@ -11,7 +11,7 @@ import { DocumentService } from './document.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 
-@Controller('device/document')
+@Controller('api/devices/document')
 export class DocumentController {
   constructor(private readonly documentService: DocumentService) {}
 

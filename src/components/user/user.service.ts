@@ -5,8 +5,6 @@ import { RoleService } from '../role/role.service';
 import { AvailableRoles } from '../role/roles.enum';
 import { UserRepository } from './user.repository';
 import { EntityManager, wrap } from '@mikro-orm/core';
-import { populate } from 'dotenv';
-import { Role } from '../role/entities/role.entity';
 
 @Injectable()
 export class UserService {
@@ -50,7 +48,9 @@ export class UserService {
     const findOneOptions = {
       email: email,
     };
-    return await this.userRepository.findOne(findOneOptions);
+    return await this.userRepository.findOne(findOneOptions, {
+      populate: ['roles'],
+    });
   }
 
   async update(userId: number, updateUserDto: UpdateUserDto): Promise<User> {

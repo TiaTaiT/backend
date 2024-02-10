@@ -13,12 +13,14 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { OperationCanceledException } from 'typescript';
 import { plainToInstance } from 'class-transformer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
@@ -39,9 +41,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const payload = { id: user.id, email: user.email, roles: user.roles };
+    user.password = '';
+
+    const payload = { user }; // { id: user.id, email: user.email, roles: user.roles };
     console.log(payload);
-    return this.jwtService.sign({ user });
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_PRIVATE_KEY', ''),
+      algorithm: 'RS256',
+    });
   }
 
   async register(registerDto: RegisterDto): Promise<string> {
@@ -68,16 +75,17 @@ export class AuthService {
       email: newUser.email,
       roles: newUser.roles,
     };
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_PRIVATE_KEY', ''),
+      algorithm: 'RS256',
+    });
   }
 
-  async verifyJwt(jwt: string): Promise<[user: number, exp: number]> {
+  async verifyJwt(jwt: string): Promise<{ id: number; exp: number }> {
     try {
-      console.log('Look at this 1: ', jwt);
       const { user, exp } = await this.jwtService.verifyAsync(jwt);
       const id = user.id;
-      console.log('Look at this 2: ', { id, exp });
-      return [id, exp];
+      return { id, exp };
     } catch (error) {
       throw new HttpException('Invalid JWT', HttpStatus.UNAUTHORIZED);
     }
