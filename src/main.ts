@@ -7,7 +7,7 @@ declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   const port = app.get(ConfigService).get('APP_PORT') || 5001;
-  const database = app.get(ConfigService).get('TYPEORM_DATABASE') || 5001;
+  const database = app.get(ConfigService).get('MIKRO_ORM_DATABASE') || 5001;
 
   //app.useGlobalGuards(RolesGuard);
   app.useGlobalPipes(new ValidationPipe());

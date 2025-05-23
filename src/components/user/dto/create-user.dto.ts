@@ -1,18 +1,30 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { User } from '../entities/user.entity';
 
-export class CreateUserDto {
-  @IsEmail()
-  email: string;
-
+export class CreateUserDto implements Omit<User, 
+  'id' | 'createdAt' | 'updatedAt' | 'roles' | 'comparePassword'
+> {
+  @IsString()
   @IsNotEmpty()
-  password: string;
+  name!: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  email!: string;
 
   @IsString()
-  firstName: string;
+  @IsNotEmpty()
+  password!: string;
 
   @IsString()
-  lastName: string;
+  @IsNotEmpty()
+  firstName!: string;
 
   @IsString()
-  name: string;
+  @IsNotEmpty()
+  lastName!: string;
+
+  @IsString()
+  @IsOptional()
+  avatar?: string;
 }

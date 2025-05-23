@@ -74,7 +74,4 @@ export class CreateDeviceDto extends PlainObject {
   @IsOptional()
   pim?: Pim;
 
-  @IsString()
-  @IsOptional()
-  document?: Document;
 }

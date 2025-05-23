@@ -55,9 +55,9 @@ export class UserService {
 
   async update(userId: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.userRepository.findOne(userId);
-    const roles = await this.rolesService.findRoles(updateUserDto.roleIds);
+    //const roles = await this.rolesService.findRoles(updateUserDto.roleIds);
     wrap(user).assign(updateUserDto);
-    user.roles.add(roles);
+    //user.roles.add(roles);
     // Save the updated user
     await this.em.flush();
     return await this.findUser(userId);

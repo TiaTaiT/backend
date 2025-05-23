@@ -10,7 +10,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { RoleRepository } from '../role.repository';
 
-@Entity({ customRepository: () => RoleRepository })
+@Entity({ repository: () => RoleRepository })
 export class Role {
   [EntityRepositoryType]?: RoleRepository;
 

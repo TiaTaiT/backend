@@ -16,7 +16,7 @@ import { Pim } from '../../pim/entities/pim.entity';
 import { Protocol } from '../../protocol/entities/protocol.entity';
 import { Type } from '../../type/entities/type.entity';
 
-@Entity({ customRepository: () => DeviceRepository })
+@Entity({ repository: () => DeviceRepository })
 export class Device {
   [EntityRepositoryType]?: DeviceRepository;
 

@@ -1,23 +1,23 @@
 import { config } from 'dotenv';
 import { Options, UnderscoreNamingStrategy } from '@mikro-orm/core';
 import { TSMigrationGenerator } from '@mikro-orm/migrations';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 console.log(process.env.NODE_ENV);
 
 const envFile = `.${process.env.NODE_ENV}.env`;
 config({ path: envFile });
 console.log('envFilePath: ', envFile);
-console.log(process.env.TYPEORM_DATABASE);
 
 const options: Options = {
-  dbName: process.env.TYPEORM_DATABASE,
-  type: <any>process.env.TYPEORM_CONNECTION,
-  host: process.env.TYPEORM_HOST,
-  port: parseInt(process.env.TYPEORM_PORT),
-  user: process.env.TYPEORM_USERNAME,
-  password: process.env.TYPEORM_PASSWORD,
-  entities: [process.env.TYPEORM_ENTITIES],
-  entitiesTs: [process.env.TYPEORM_ENTITIESTS],
+  dbName: process.env.MIKRO_ORM_DATABASE,
+  driver: PostgreSqlDriver,
+  host: process.env.MIKRO_ORM_HOST,
+  port: parseInt(process.env.MIKRO_ORM_PORT),
+  user: process.env.MIKRO_ORM_USERNAME,
+  password: process.env.MIKRO_ORM_PASSWORD,
+  entities: [process.env.MIKRO_ORM_ENTITIES],
+  entitiesTs: [process.env.MIKRO_ORM_ENTITIESTS],
   namingStrategy: UnderscoreNamingStrategy,
   logger: console.log, // Enable query logging to console
   migrations: {
@@ -35,5 +35,5 @@ const options: Options = {
     generator: TSMigrationGenerator, // migration generator, e.g. to allow custom formatting
   },
 };
-//console.log('MikroORM configuration:', options);
+console.log('MikroORM configuration:', options);
 export default options;
