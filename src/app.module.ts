@@ -15,12 +15,14 @@ import { DocumentModule } from './components/stock/document/document.module';
 import { ProtocolModule } from './components/stock/protocol/protocol.module';
 import { HardwareModule } from './components/app-auth/hardware/hardware.module';
 import { FunctionalityModule } from './components/app-auth/functionality/functionality.module';
+import { HealthController } from './components/health/health.controller';
 
 const envModule = ConfigModule.forRoot({
   isGlobal: true,
   envFilePath: `.${process.env.NODE_ENV}.env`,
 });
 @Module({
+  controllers: [HealthController],
   imports: [
     envModule,
     DatabaseModule,
